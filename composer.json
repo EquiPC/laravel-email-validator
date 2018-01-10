@@ -1,0 +1,32 @@
+{
+    "name": "equipc/laravel-email-validator",
+    "description": "Validation rule to validate email for Laravel",
+    "homepage": "https://github.com/EquiPC/laravel-email-validator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michel LAURENT",
+            "email": "michel.laurent@equipc.net"
+        }
+    ],
+    "require": {
+        "php" : "~7.0",
+        "illuminate/support": "^5.5",
+        "quickemailverification/quickemailverification": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "EquiPC\\EmailValidator\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EquiPC\\EmailValidator\\EmailValidatorServiceProvider"
+            ],
+            "aliases": {
+                "EmailValidator": "EquiPC\\EmailValidator\\EmailValidatorFacade"
+            }
+        }
+    }
+}
