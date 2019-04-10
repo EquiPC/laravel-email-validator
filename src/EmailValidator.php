@@ -80,8 +80,14 @@ class EmailValidator
      */
     public function verify($emailAddress)
     {
-        $this->response = $this->client->quickemailverification()->verify($emailAddress);
+        if (Config::get('services.quickemailverification.sandbox')) {
+            $this->response = $this->client->quickemailverification()->sandbox($emailAddress);
 
+            return $this;
+        }
+        
+        $this->response = $this->client->quickemailverification()->verify($emailAddress);    
+        
         return $this;
     }
 

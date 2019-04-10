@@ -33,6 +33,7 @@ composer require equipc/laravel-email-validator
 ```php
 'quickemailverification' => [
 	'key' => env('QUICKEMAILVERIFICATION_KEY'),
+	'sandbox' => env('QUICKEMAILVERIFICATION_SANDBOX', false)
 ]
 ```
 
