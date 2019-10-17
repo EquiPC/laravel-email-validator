@@ -10,33 +10,17 @@ Validate email addresses in Laravel 5
 composer require equipc/laravel-email-validator
 ```
 
-- If you are using a Laravel version before 5.5, add the service provider and the facade alias to `config/app.php`
+- Publish the configuration file using the command below
 
-```php
-'providers' => [
-	...
-    EquiPC\EmailValidator\EmailValidatorServiceProvider::class,
-    ...
-]
+```bash
+php artisan vendor:publish --provider="EquiPC\EmailValidator\EmailValidatorServiceProvider" --tag="config"
 ```
 
-```php
-'aliases' => [
-    ...
-    'EmailValidator' => EquiPC\EmailValidator\EmailValidatorFacade::class,
-    ...
-]
+- Configure your Quick Email Verification key in your `.env` file. You can retrieve this API key from the Quick Email Verification control panel.
+
 ```
-
-- Add the 'quickemailverification' service configuration to `config/services.php`
-
-```php
-'quickemailverification' => [
-	'key' => env('QUICKEMAILVERIFICATION_KEY'),
-	'sandbox' => env('QUICKEMAILVERIFICATION_SANDBOX', false)
-]
+QUICKEMAILVERIFICATION_KEY=your-api-key
 ```
-
 
 ## Usage
 
@@ -57,10 +41,17 @@ php artisan vendor:publish --provider="EquiPC\EmailValidator\EmailValidatorServi
 This will publish this file to `resources/lang/vendor/emailValidator/en/validation.php`.
 
 ```php
- 
 return [
 	"is_invalid_email" => "This email is invalid.",
  ];
  ```
  
  If you want to translate the values to, for example, French, just copy that file over to `resources/lang/vendor/emailValidator/fr/validation.php` and fill in the French translations.
+
+## Sandbox mode
+
+You can enable sandbox mode in your `.env` file
+
+```
+QUICKEMAILVERIFICATION_SANDBOX=true
+```

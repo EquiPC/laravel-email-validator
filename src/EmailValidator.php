@@ -56,7 +56,7 @@ class EmailValidator
      */
     public function setApikey()
     {
-        $this->apiKey = Config::get('services.quickemailverification.key');
+        $this->apiKey = Config::get('email-validator.quickemailverification.key');
     }
 
     /**
@@ -80,7 +80,7 @@ class EmailValidator
      */
     public function verify($emailAddress)
     {
-        if (Config::get('services.quickemailverification.sandbox')) {
+        if (Config::get('email-validator.quickemailverification.sandbox')) {
             $this->response = $this->client->quickemailverification()->sandbox($emailAddress);
 
             return $this;

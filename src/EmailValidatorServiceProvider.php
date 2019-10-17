@@ -17,6 +17,10 @@ class EmailValidatorServiceProvider extends ServiceProvider
             __DIR__.'/../resources/lang' => base_path('resources/lang/vendor/emailValidator'),
         ], 'lang');
         
+        $this->publishes([
+            __DIR__.'/../config/email-validator.php' => config_path('email-validator.php'),
+        ], 'config');
+
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'emailValidator');
 
         Validator::extend('isValidEmail', function ($attribute, $value, $parameters, $validator) {
