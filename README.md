@@ -1,6 +1,6 @@
 # Laravel Email Validator
 
-Validate email addresses in Laravel 6.x
+Validate email addresses in Laravel 7.x
 
 ## Installation
 
