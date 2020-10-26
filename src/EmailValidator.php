@@ -12,7 +12,7 @@ class EmailValidator
      * Various response messages based on verification status
      * @var array
      */
-    public $serverResponses = [
+    private $serverResponses = [
         'invalid_email'       => 'Specified email has invalid email address syntax',
         'invalid_domain'      => 'Domain name does not exist',
         'rejected_email'      => 'SMTP server rejected email. Email does not exist',
@@ -30,24 +30,17 @@ class EmailValidator
      * Api Key for quickemailverficationservice
      * @var string
      */
-    public $apiKey;
-
-    /**
-     *  Instance of QuickEmailVerification Client
-     * @var object
-     */
-    public $client;
+    private $apiKey;
 
     /**
      * Response from the QuickEmailVerification Service
      * @var object
      */
-    public $response;
+    private $response;
 
     public function __construct()
     {
         $this->setApiKey();
-        $this->setClient();
     }
 
     /**
@@ -57,20 +50,11 @@ class EmailValidator
     public function setApikey()
     {
         $this->apiKey = Config::get('email-validator.quickemailverification.key');
-    }
 
-    /**
-     * Instantiate QuickEmailVerification Client with api Key
-     * @return void
-     */
-    public function setClient()
-    {
         if(empty($this->apiKey))
         {
             throw new InvalidArgumentException('Api key can not be empty');
         }
-
-        $this->client = new Client($this->apiKey);
     }
 
     /**
@@ -80,14 +64,16 @@ class EmailValidator
      */
     public function verify($emailAddress)
     {
-        if (Config::get('email-validator.quickemailverification.sandbox')) {
-            $this->response = $this->client->quickemailverification()->sandbox($emailAddress);
+        $url = 'https://api.quickemailverification.com/v1/verify/';
 
-            return $this;
+        if (Config::get('email-validator.quickemailverification.sandbox')) {
+            $url = $url . 'sandbox/';
         }
         
-        $this->response = $this->client->quickemailverification()->verify($emailAddress);    
-        
+        $this->response = Http::withHeaders([
+            'Authorization' => 'token ' . $this->apiKey,
+        ])->get($url . '?email=' . $emailAddress);
+
         return $this;
     }
 
@@ -98,8 +84,8 @@ class EmailValidator
      */
     public function isValid()
     {
-        $status = $this->response->body['result'];
-        $reason = $this->response->body['reason'];
+        $status = $this->response->json()['result'];
+        $reason = $this->response->json()['reason'];
 
         switch($status):
             case 'valid':
@@ -130,7 +116,7 @@ class EmailValidator
      */
     public function isDisposable()
     {
-        return $this->response->body['disposable'];
+        return $this->response->json()['disposable'];
     }
 
     /**
@@ -139,7 +125,7 @@ class EmailValidator
      */
     public function apiRequestStatus()
     {
-        return $this->response->body['success'];
+        return $this->response->json()['success'];
     }
 
     /**
@@ -148,7 +134,7 @@ class EmailValidator
      */
     public function getDomainName()
     {
-        return $this->response->body['domain'];
+        return $this->response->json()['domain'];
     }
 
     /**
@@ -158,7 +144,7 @@ class EmailValidator
      */
     public function getUser()
     {
-        return $this->response->body['user'];
+        return $this->response->json()['user'];
     }
 
     /**
@@ -168,7 +154,7 @@ class EmailValidator
      */
     public function getEmailAddress()
     {
-        return $this->response->body['email'];
+        return $this->response->json()['email'];
     }
 
     /**
@@ -177,7 +163,7 @@ class EmailValidator
      */
     public function acceptEmailsDeliveredToDomain()
     {
-        return $this->response->body['accept_all'];
+        return $this->response->json()['accept_all'];
     }
 
     /**
@@ -187,6 +173,6 @@ class EmailValidator
      */
     public function isRole()
     {
-        return $this->response->body['role'];
+        return $this->response->json()['role'];
     }
 }
