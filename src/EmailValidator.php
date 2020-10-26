@@ -64,10 +64,10 @@ class EmailValidator
      */
     public function verify($emailAddress)
     {
-        $url = 'https://api.quickemailverification.com/v1/verify/';
+        $url = 'https://api.quickemailverification.com/v1/verify';
 
         if (Config::get('email-validator.quickemailverification.sandbox')) {
-            $url = $url . 'sandbox/';
+            $url = $url . '/sandbox';
         }
         
         $this->response = Http::withHeaders([
