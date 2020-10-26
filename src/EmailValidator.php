@@ -3,7 +3,7 @@
 namespace EquiPC\EmailValidator;
 
 use InvalidArgumentException;
-use QuickEmailVerification\Client;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
 
 class EmailValidator
