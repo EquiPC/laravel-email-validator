@@ -2,6 +2,7 @@
 
 namespace EquiPC\EmailValidator;
 
+use Http;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
@@ -84,20 +85,25 @@ class EmailValidator
      */
     public function isValid()
     {
-        $status = $this->response->json()['result'];
-        $reason = $this->response->json()['reason'];
+        if ($this->response->successful()) {
+            
+            $status = $this->response->json()['result'];
+            $reason = $this->response->json()['reason'];
 
-        switch($status):
-            case 'valid':
-                return [true, $this->getReason($reason)];
-                break;
-            case 'invalid':
-            case 'unknown':
-                return [false, $this->getReason($reason)];
-                break;
-            default:
-                throw new InvalidArgumentException('Invalid Response');
-        endSwitch;
+            switch($status) {
+                case 'valid':
+                    return [true, $this->getReason($reason)];
+                    break;
+                case 'invalid':
+                case 'unknown':
+                    return [false, $this->getReason($reason)];
+                    break;
+                default:
+                    throw new InvalidArgumentException('Invalid Response');
+            }
+        }
+
+        return [false, 'Error ' . $this->response->status()];
     }
 
     /**
