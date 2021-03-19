@@ -2,7 +2,6 @@
 
 namespace EquiPC\EmailValidator;
 
-use Http;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Config;
